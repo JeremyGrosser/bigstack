@@ -95,7 +95,12 @@ def main():
                 stack_size = int(stack_size)
                 if stack_size < args.max:
                     continue
-                source_file, line_number, column_number, symbol_name = symbol.split(':', 3)
+                if symbol.startswith('<built-in>'):
+                    source_file, symbol_name = symbol.split(':', 1)
+                    line_number = 0
+                    column_number = 0
+                else:
+                    source_file, line_number, column_number, symbol_name = symbol.split(':', 3)
                 if not args.long:
                     source_file = os.path.basename(source_file)
                 alloc = (source_file, int(line_number), int(column_number), symbol_name, stack_size, allocation_type)
